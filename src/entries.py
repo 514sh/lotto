@@ -35,7 +35,7 @@ class Entries:
                 my_tie.append(entry)
             elif guesses > 2:
                 my_winners.append(entry)
-        return my_winners, my_tie, total_bet
+        return my_winners, my_tie, total_bet, [ str(i) for i in winning_number ]
 
     def result(self, winning_number, limit):
         pasok = self.pasok(limit=limit)
@@ -49,7 +49,7 @@ class Entries:
                 my_tie.append(f"{key}{pasok[key]}")
             elif guesses > 2:
                 my_winners.append(f"{key}{pasok[key]}")
-        return my_winners, my_tie, total_bet
+        return my_winners, my_tie, total_bet, [ str(i) for i in winning_number ]
 
     @property 
     def __keys(self):

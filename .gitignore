@@ -4,3 +4,12 @@ input/
 kabo/
 result/
 tulog/
+
+.env
+src/dist/
+src/build/
+src/*.spec
+
+*.spec
+dist/
+build/

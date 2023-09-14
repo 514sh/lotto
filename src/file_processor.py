@@ -51,12 +51,13 @@ class FileProcessor:
     
     def print_wrong_input(self):
         if len(self.__wrong_input) == 0:
-            print(f"No wrong input for {self.sender}")
+            print(f"No wrong input for {self.sender}\n")
         else:
             print(f"WRONG INPUT ON {self.sender}")
             for entry in self.__wrong_input:
                 split = entry.split("@$")
                 print(f"  - {self.sender} @ Line number {split[1]} : '{split[2]}' with status: {split[0]}")
+            print("\n")
 
     def write_tulog(self, duplicates):
         filename = f"{self.base_dir}tulog/{self.__timestr}_tulog_{self.sender}.txt"
@@ -101,7 +102,8 @@ class FileProcessor:
         filename = f"{self.base_dir}result/{self.__timestr}_result_raw_{self.sender}.txt"
         winner_total, tie_total = 0, 0
         with open(filename, "w", encoding="utf-8") as my_file:
-            my_file.write(f"RESULT: {self.sender} {self.__timestr}\n\n")
+            my_file.write(f"RESULT: {self.sender} {self.__timestr}\n")
+            my_file.write(f"WINNING COMBINATION: {'-'.join(result[3])}\n\n")
             my_file.write("WINNERS\n")
             for winner in result[0]:
                 split = winner.split("@$")
@@ -125,7 +127,9 @@ class FileProcessor:
         filename = f"{self.base_dir}result/{self.__timestr}_result_{self.sender}.txt"
         winner_total, tie_total = 0, 0
         with open(filename, "w", encoding="utf-8") as my_file:
-            my_file.write(f"RESULT: {self.sender} {self.__timestr}\n\n")
+            my_file.write(f"RESULT: {self.sender} {self.__timestr}\n")
+            my_file.write(f"WINNING COMBINATION: {'-'.join(result[3])}\n\n")
+
             my_file.write("WINNERS\n")
             for winner in result[0]:
                 line = winner.split(",")

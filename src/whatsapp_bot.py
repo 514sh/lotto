@@ -9,17 +9,15 @@ from selenium.webdriver.common.by import By
 import time
 
 class WhatsAppBot:
-    def __init__(self):
+    def __init__(self, base_dir):
         chrome_options = Options()
         chrome_options.add_argument("--user-data-dir=C:/Users/mjmba/AppData/Local/Google/Chrome/User Data/Default/Cookies")
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options) 
         self.driver.get("https://web.whatsapp.com/")
         self.wait = WebDriverWait(self.driver, 100)
+        self.base_dir = base_dir
 
 
-    # def wait_for_login(self):
-    #     input("Log in to WhatsApp Web and press Enter once logged in...")
-    #     time.sleep(2)
 
     def send_messages_from_file(self, contact_name, file_path):
         try:
@@ -32,9 +30,9 @@ class WhatsAppBot:
             message_box = self.wait.until(EC.presence_of_element_located((
                 By.XPATH, inp_xpath)))
             # Read and send messages from the file
-            with open(file_path, "r", encoding="utf-8") as file:
+            filename = f"{self.base_dir}{file_path}"
+            with open(filename, "r", encoding="utf-8") as file:
                 messages = file.readlines()
-                print(messages)
                 for message in messages:
                     message = message.strip()
                     message_box.send_keys(message)

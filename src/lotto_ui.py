@@ -3,8 +3,14 @@ from entries import *
 from duplicates_with import *
 from whatsapp_bot import *
 from datetime import *
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 today = datetime.now()
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def choose():
     print("What output do you want to get?")
@@ -14,7 +20,9 @@ def choose():
     
     try:
         choice = int(input("Enter your choice (1/2/3): "))
-        return choice
+        if choice not in [1,2,3]:
+            raise ValueError("")
+        return choice    
     except ValueError:
         print("Invalid input. Please enter 1, 2, or 3.")
         return choose()
@@ -37,7 +45,7 @@ def to_continue():
         return False
     
 def send_to_whatsapp():
-    answer = input(f"Would you like send to whatsapp automatically? y/n: ")
+    answer = input(f"Would you like to send the output to whatsapp automatically? y/n: ")
     answer = answer.strip()
     if answer.lower() == "y" or answer.lower() == "yes":
         return True
@@ -45,7 +53,8 @@ def send_to_whatsapp():
         return False
 
 def send_now(contact_name, file_path):
-    whatsapp_bot = WhatsAppBot()
+    base_dir = os.getenv('BASE_DIR')
+    whatsapp_bot = WhatsAppBot(base_dir=base_dir)
     whatsapp_bot.send_messages_from_file(contact_name, file_path)
     whatsapp_bot.close() 
 
@@ -54,23 +63,24 @@ def timestr():
 
 def main():
     senders = ["agustin", "bryan", "laban_bryan"]
-    winning_number = [12, 41, 30, 22, 43, 24]
     contacts = ['"Astig group👋 A.K.A 🤫BOY TABAS"',
                 '"👊laban"',
                 '"Balik duplicate"'
                 ]
+    base_dir = os.getenv('BASE_DIR')
     while True:
+        clear_terminal()
         chosen = choose()
         all_entries = []
         all_analyzer = []
         auto_send = send_to_whatsapp()
         for sender in senders:
             
-            analyzer = FileProcessor(sender=sender)
+            analyzer = FileProcessor(sender=sender,base_dir=base_dir)
             all = analyzer.read_input()
             entries = Entries(all=all, sender=sender)
-            if chosen == 1:
-              analyzer.print_wrong_input()
+            
+            analyzer.print_wrong_input()
 
             duplicates = entries.duplicates
             analyzer.write_tulog(duplicates=duplicates)
@@ -87,12 +97,12 @@ def main():
             
         if chosen == 2 or chosen == 3:
             limit = int(input("What is the limit? "))
-            duplicates_with = DuplicatesWith(entries=all_entries[0], other=all_entries[1])
+            duplicates_with = DuplicatesWith(entries=all_entries[0], other=all_entries[1], base_dir=base_dir)
             duplicates_with.write(limit=limit)  
             total_duplicates_with = min(duplicates_with.lines(limit=limit)[1], duplicates_with.lines(limit=limit)[2])
             
             if auto_send and chosen == 2:
-                file_path = f"duplicates/{timestr()}_duplicates_{senders[0]}_{senders[1]}.txt"
+                file_path = f"duplicate/{timestr()}_duplicates_{senders[0]}_{senders[1]}.txt"
                 send_now(contact_name=contacts[2], file_path=file_path)
 
             
@@ -125,34 +135,9 @@ def main():
                         if auto_send:
                           file_path = f"result/{timestr()}_result_raw_{senders[index]}.txt"  # Replace with the path to your message file
                           send_now(contact_name=contacts[1], file_path=file_path)
-
+        print("Done...")
         if not to_continue():
             break
                     
 
 main()
-
-# analyzer.print_wrong_input()
-# other_analyzer.print_wrong_input()
-
-# duplicates = entries.duplicates
-# other_duplicates = other_entries.duplicates
-
-# analyzer.write_tulog(duplicates=duplicates)
-# other_analyzer.write_tulog(duplicates=duplicates)
-
-# duplicates_with = DuplicatesWith(entries=entries, other=other_entries)
-# duplicates_with.write(limit=15)
-# total_duplicates_with = min(duplicates_with.lines(limit=15)[1], duplicates_with.lines(limit=15)[2])
-
-# laban_analyzer = FileProcessor(sender="laban_bryan")
-# output = laban_analyzer.read_input()
-# laban_entries = Entries(all=output, sender="laban_bryan")
-# bookies = laban_entries.bookies
-# laban_analyzer.write_kabo(bookies=bookies)
-# result_raw = laban_entries.result_raw(winning_number=winning_number)
-
-# laban_analyzer.write_result_raw(result=result_raw)
-
-
-# other_analyzer.write_result(result=result, total_duplicates_with=total_duplicates_with, minus_sender="agustin")
