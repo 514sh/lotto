@@ -9,7 +9,7 @@ To install the required dependencies, run the following command:
 pip install -r requirements.txt
 ```
 ## Configuration
-Before running the application, make sure to set the BASE_DIR variable in the .env file.
+Before running the application, make sure to set the BASE_DIR and USER_DATA_DIR variable in the .env file.
 
 ## Building and Running
 To build and run the application, follow these steps:

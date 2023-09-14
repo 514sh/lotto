@@ -54,7 +54,8 @@ def send_to_whatsapp():
 
 def send_now(contact_name, file_path):
     base_dir = os.getenv('BASE_DIR')
-    whatsapp_bot = WhatsAppBot(base_dir=base_dir)
+    user_data_dir = os.getenv('USER_DATA_DIR')
+    whatsapp_bot = WhatsAppBot(base_dir=base_dir, user_data_dir=user_data_dir)
     whatsapp_bot.send_messages_from_file(contact_name, file_path)
     whatsapp_bot.close() 
 

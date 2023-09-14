@@ -9,9 +9,9 @@ from selenium.webdriver.common.by import By
 import time
 
 class WhatsAppBot:
-    def __init__(self, base_dir):
+    def __init__(self, base_dir, user_data_dir):
         chrome_options = Options()
-        chrome_options.add_argument("--user-data-dir=C:/Users/mjmba/AppData/Local/Google/Chrome/User Data/Default/Cookies")
+        chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options) 
         self.driver.get("https://web.whatsapp.com/")
         self.wait = WebDriverWait(self.driver, 100)
@@ -49,13 +49,6 @@ class WhatsAppBot:
         # Close the Chrome WebDriver
         self.driver.quit()
 
-# Example usage:
-if __name__ == "__main__":
-    whatsapp_bot = WhatsAppBot()
-    contact_name = '"Mcmc"'
-    file_path = "kabo/09-14-2023-kabo-laban_bryan.txt"  # Replace with the path to your message file
-    whatsapp_bot.send_messages_from_file(contact_name, file_path)
-    whatsapp_bot.close()
 
 
 
