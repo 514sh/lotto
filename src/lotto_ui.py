@@ -94,6 +94,8 @@ def main():
                 file_path = f"tulog/{timestr()}_tulog_{sender}.txt"
                 if sender == "laban_bryan":
                   send_now(contact_name=contacts[1], file_path=file_path)
+                elif sender == "laban_agustin":
+                  send_now(contact_name=contacts[3], file_path=file_path)
                 else:
                   send_now(contact_name=contacts[0], file_path=file_path)
             
@@ -108,10 +110,10 @@ def main():
                 send_now(contact_name=contacts[2], file_path=file_path)
 
             
-            bookies = all_entries[2].bookies
-            all_analyzer[2].write_kabo(bookies=bookies)
+            bookies = all_entries[3].bookies
+            all_analyzer[3].write_kabo(bookies=bookies)
             if auto_send and chosen == 2:
-                file_path = f"kabo/{timestr()}_kabo_{senders[2]}.txt"
+                file_path = f"kabo/{timestr()}_kabo_{senders[3]}.txt"
                 send_now(contact_name=contacts[1], file_path=file_path)
 
             if chosen == 3:
