@@ -77,12 +77,12 @@ class FileProcessor:
         filename = f"{self.base_dir}kabo/{self.__timestr}_kabo_{self.sender}.txt"
         total = 0
         with open(filename, "w", encoding="utf-8") as my_file:
-            my_file.write(f"KABO ENTRIES: {self.sender} {self.__timestr}\n\n")
+            my_file.write(f"KABO ENTRIES:, {self.sender}, {self.__timestr}\n\n")
             
             for key in bookies:
-                my_file.write(f"{key:<20}:  {bookies[key]}\n")
+                my_file.write(f"{key},  {bookies[key]}\n")
                 total += int(bookies[key])
-            my_file.write(f"TOTAL{' ':<15}:  {total}")
+            my_file.write(f"TOTAL:,  {total}")
 
     def __read_tulog(self, filename):
         prev_tulog = set()

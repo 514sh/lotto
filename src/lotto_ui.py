@@ -63,7 +63,7 @@ def timestr():
     return today.strftime("%m_%d_%Y")
 
 def main():
-    senders = ["agustin", "bryan", "laban_bryan"]
+    senders = ["agustin", "bryan", "laban_agustin", "laban_bryan"]
     contacts = ['"Astig group👋 A.K.A 🤫BOY TABAS"',
                 '"👊laban"',
                 '"Balik duplicate"'
@@ -110,31 +110,35 @@ def main():
             bookies = all_entries[2].bookies
             all_analyzer[2].write_kabo(bookies=bookies)
             if auto_send and chosen == 2:
-                file_path = f"kabo/{timestr()}_kabo_{senders[2]}.txt"  # Replace with the path to your message file
+                file_path = f"kabo/{timestr()}_kabo_{senders[2]}.txt"
                 send_now(contact_name=contacts[1], file_path=file_path)
 
             if chosen == 3:
                 winning_number = get_winning_number()
                 
                 for index in range(len(all_entries)):
-                    if index == 2:
-                        limit = False
-                    result = all_entries[index].result(winning_number=winning_number, limit=limit)
+                    if index == 3:
+                        limit = False  # NO LIMIT FOR LABAN BRYAN
+        
+                    if index != 2:
+                        result = all_entries[index].result(winning_number=winning_number, limit=limit, other_entries=Entries()) 
+                    else: 
+                        result = all_entries[index].result(winning_number=winning_number, limit=limit, other_entries=all_entries[0])
                     all_analyzer[index].write_result(result= result, minus_sender="agustin", total_duplicates_with=total_duplicates_with)
                     
                     if auto_send:
                       file_path = f"result/{timestr()}_result_{senders[index]}.txt"
-                      if index == 2:
+                      if index == 3:
                         send_now(contact_name=contacts[1], file_path=file_path)
                       else:
                         send_now(contact_name=contacts[0], file_path=file_path)
                       
-                    if index == 2:
+                    if index == 3:
                         result_raw = all_entries[index].result_raw(winning_number=winning_number)
                         all_analyzer[index].write_result_raw(result=result_raw)
 
                         if auto_send:
-                          file_path = f"result/{timestr()}_result_raw_{senders[index]}.txt"  # Replace with the path to your message file
+                          file_path = f"result/{timestr()}_result_raw_{senders[index]}.txt"
                           send_now(contact_name=contacts[1], file_path=file_path)
         print("Done...")
         if not to_continue():

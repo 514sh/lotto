@@ -37,8 +37,11 @@ class Entries:
                 my_winners.append(entry)
         return my_winners, my_tie, total_bet, [ str(i) for i in winning_number ]
 
-    def result(self, winning_number, limit):
-        pasok = self.pasok(limit=limit)
+    def result(self, winning_number, limit, other_entries):
+        if other_entries.sender == "agustin":
+            pasok = self.get_pasok_for_laban_agustin(other_entries, limit)
+        else:
+            pasok = self.pasok(limit=limit)
         my_winners = list()
         my_tie = list()
         total_bet = 0
@@ -66,7 +69,23 @@ class Entries:
                 my_pasok[key] = int(split[5])
         return my_dict, my_pasok
     
-            
+    @property
+    def my_pasok_no_limit(self):
+        return self.__keys[1]
+    
+    # SPECIAL CASE: PASOK FOR LABAN_AGUSTIN
+    def get_pasok_for_laban_agustin(self, other_entries, limit: int):
+        other_pasok = other_entries.my_pasok_no_limit
+        pasok = self.my_pasok_no_limit
+        new_pasok = dict()
+        for entry in pasok:
+            if entry in other_pasok:
+                if pasok[entry] > limit:
+                    new_pasok[entry] = min(10, pasok[entry] - limit)
+            else:
+                new_pasok[entry] = min(pasok[entry], 10)
+        return new_pasok
+        
     @property
     def bookies(self):
         my_bookies = dict()

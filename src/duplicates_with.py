@@ -23,22 +23,22 @@ class DuplicatesWith:
     def lines(self, limit):
         pasok = self.entries.pasok(limit)
         other_pasok = self.other.pasok(limit)
-        lines = [f"DUPLICATES: {self.__timestr}"]
-        lines.append(f"{self.entries.sender:<20}{self.other.sender}")
+        lines = [f",,,,DUPLICATES: {self.__timestr}"]
+        lines.append(f"{' ':<7}FN,{' ':<7}SN,{' ':<8}TN,{' ':<5}BET,,{' ':<7}FN,{' ':<7}SN,{' ':<8}TN,{' ':<5}BET")
         total_bet1, total_bet2 = 0, 0
         for key in pasok:
             if key in other_pasok:
                 left, right = f"{key}{pasok[key]}" , f"{key}{other_pasok[key]}"
-                lines.append(f"{self.__formatted_line(line=left):<20}{self.__formatted_line(line=right)}")
+                lines.append(f"{self.__formatted_line(line=left)},,{self.__formatted_line(line=right)}")
                 total_bet1 += pasok[key]
                 total_bet2 += other_pasok[key]    
-        lines.append(f"TOTAL BET: {total_bet1:<9}TOTAL BET: {total_bet2}")
+        lines.append(f"{self.entries.sender},{' ':<10},TOTAL:, {total_bet1},,{self.other.sender},{' ':<10},TOTAL:, {total_bet2}")
         return lines, total_bet1, total_bet2
     
     def __formatted_line(self, line):
         numbers = line.split(',')
         formatted_numbers = [f'{int(num):02}' for num in numbers]
-        return ' '.join(formatted_numbers)
+        return ','.join(formatted_numbers)
 
     def write(self, limit):
         filename = f"{self.base_dir}duplicate/{self.__timestr}_duplicates_{self.entries.sender}_{self.other.sender}.txt"
