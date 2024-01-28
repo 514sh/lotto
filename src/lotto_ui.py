@@ -66,7 +66,8 @@ def main():
     senders = ["agustin", "bryan", "laban_agustin", "laban_bryan"]
     contacts = ['"Astig group👋 A.K.A 🤫BOY TABAS"',
                 '"👊laban"',
-                '"Balik duplicate"'
+                '"Balik duplicate"',
+                '"😊😊😊 SOLO LABAN😊😊😊"'
                 ]
     base_dir = os.getenv('BASE_DIR')
     while True:
@@ -130,6 +131,8 @@ def main():
                       file_path = f"result/{timestr()}_result_{senders[index]}.txt"
                       if index == 3:
                         send_now(contact_name=contacts[1], file_path=file_path)
+                      elif index == 2:
+                        send_now(contact_name=contacts[3], file_path=file_path)  
                       else:
                         send_now(contact_name=contacts[0], file_path=file_path)
                       
