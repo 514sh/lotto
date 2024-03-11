@@ -73,8 +73,8 @@ class Entries:
     def my_pasok_no_limit(self):
         return self.__keys[1]
     
-    # SPECIAL CASE: PASOK FOR LABAN_AGUSTIN
-    def get_pasok_for_laban_agustin(self, other_entries, limit: int):
+    # SPECIAL CASE: PASOK FOR LABAN_AGUSTIN PREVIOUS VERSION
+    def get_pasok_for_laban_agustin_previous(self, other_entries, limit: int):
         other_pasok = other_entries.my_pasok_no_limit
         pasok = self.my_pasok_no_limit
         new_pasok = dict()
@@ -84,6 +84,17 @@ class Entries:
                     new_pasok[entry] = min(10, pasok[entry] - limit)
             else:
                 new_pasok[entry] = min(pasok[entry], 10)
+        return new_pasok
+    
+    def get_pasok_for_laban_agustin(self, other_entries, limit: int):
+        limit = 10  #limit is hardcoded to 10
+        pasok = self.my_pasok_no_limit
+        new_pasok = dict()
+        for entry in pasok:
+            if pasok[entry] > limit:
+                new_pasok[entry] = min(limit, pasok[entry] - limit)
+            else:
+                new_pasok[entry] = min(pasok[entry], limit)
         return new_pasok
         
     @property

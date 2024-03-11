@@ -67,7 +67,7 @@ def main():
     contacts = ['"Astig group👋 A.K.A 🤫BOY TABAS"',
                 '"👊laban"',
                 '"Balik duplicate"',
-                '"😊😊😊 SOLO LABAN😊😊😊"'
+                '"😊😊😊 Duran-Agus bakas😊😊😊"'
                 ]
     base_dir = os.getenv('BASE_DIR')
     while True:
