@@ -91,10 +91,10 @@ class Entries:
         pasok = self.my_pasok_no_limit
         new_pasok = dict()
         for entry in pasok:
-            if pasok[entry] > limit:
-                new_pasok[entry] = min(limit, pasok[entry] - limit)
+            if pasok[entry] >= limit:
+                new_pasok[entry] = limit
             else:
-                new_pasok[entry] = min(pasok[entry], limit)
+                new_pasok[entry] = pasok[entry]
         return new_pasok
         
     @property
