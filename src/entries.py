@@ -37,11 +37,8 @@ class Entries:
                 my_winners.append(entry)
         return my_winners, my_tie, total_bet, [ str(i) for i in winning_number ]
 
-    def result(self, winning_number, limit, other_entries):
-        if other_entries.sender == "agustin":
-            pasok = self.get_pasok_for_laban_agustin(other_entries, limit)
-        else:
-            pasok = self.pasok(limit=limit)
+    def result(self, winning_number, limit):
+        pasok = self.pasok(limit=limit)
         my_winners = list()
         my_tie = list()
         total_bet = 0

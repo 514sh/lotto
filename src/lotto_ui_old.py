@@ -63,8 +63,12 @@ def timestr():
     return today.strftime("%m_%d_%Y")
 
 def main():
-    senders = ["agustin", "bryan", "laiza", "atlas"]
-    contacts = ['"Astig group👋 A.K.A 🤫BOY TABAS"', '"🤫🤫ATLAS LABAN🤫🤫"']
+    senders = ["agustin", "bryan", "laban_agustin", "laban_bryan"]
+    contacts = ['"Astig group👋 A.K.A 🤫BOY TABAS"',
+                '"👊laban"',
+                '"Balik duplicate"',
+                '"😊😊😊 Duran-Agus bakas😊😊😊"'
+                ]
     base_dir = os.getenv('BASE_DIR')
     while True:
         clear_terminal()
@@ -88,36 +92,59 @@ def main():
 
             if auto_send and chosen == 1:
                 file_path = f"tulog/{timestr()}_tulog_{sender}.txt"
-                send_now(contact_name=contacts[0], file_path=file_path)
+                if sender == "laban_bryan":
+                  send_now(contact_name=contacts[1], file_path=file_path)
+                elif sender == "laban_agustin":
+                  send_now(contact_name=contacts[3], file_path=file_path)
+                else:
+                  send_now(contact_name=contacts[0], file_path=file_path)
             
         if chosen == 2 or chosen == 3:
             limit = int(input("What is the limit? "))
-            duplicates_with_list = [
-                {"class": DuplicatesWith(entries=all_entries[0], other=all_entries[1], base_dir=base_dir), "sender_name": ["agustin", "bryan"]},
-                {"class": DuplicatesWith(entries=all_entries[0], other=all_entries[2], base_dir=base_dir), "sender_name": ["agustin", "laiza"]},
-                {"class": DuplicatesWith(entries=all_entries[1], other=all_entries[2], base_dir=base_dir), "sender_name": ["bryan", "laiza"]},
-                ]
+            duplicates_with = DuplicatesWith(entries=all_entries[0], other=all_entries[1], base_dir=base_dir)
+            duplicates_with.write(limit=limit)  
+            total_duplicates_with = min(duplicates_with.lines(limit=limit)[1], duplicates_with.lines(limit=limit)[2])
             
-            for duplicates_with in duplicates_with_list:
-              duplicates_with["class"].write(limit=limit)  
-              # total_duplicates_with = min(duplicates_with.lines(limit=limit)[1], duplicates_with.lines(limit=limit)[2])
-              
-              if auto_send and chosen == 2:
-                  file_path = f"duplicate/{timestr()}_duplicates_{duplicates_with["sender_name"][0]}_{duplicates_with["sender_name"][1]}.txt"
-                  send_now(contact_name=contacts[0], file_path=file_path)
+            if auto_send and chosen == 2:
+                file_path = f"duplicate/{timestr()}_duplicates_{senders[0]}_{senders[1]}.txt"
+                send_now(contact_name=contacts[2], file_path=file_path)
 
+            
+            bookies = all_entries[3].bookies
+            all_analyzer[3].write_kabo(bookies=bookies)
+            if auto_send and chosen == 2:
+                file_path = f"kabo/{timestr()}_kabo_{senders[3]}.txt"
+                send_now(contact_name=contacts[1], file_path=file_path)
 
             if chosen == 3:
                 winning_number = get_winning_number()
                 
                 for index in range(len(all_entries)):
-                    result = all_entries[index].result(winning_number=winning_number, limit=limit)
-                    all_analyzer[index].write_result(result= result, minus_sender="", total_duplicates_with=0)
+                    if index == 3:
+                        limit = False  # NO LIMIT FOR LABAN BRYAN
+        
+                    if index != 2:
+                        result = all_entries[index].result(winning_number=winning_number, limit=limit, other_entries=Entries()) 
+                    else: 
+                        result = all_entries[index].result(winning_number=winning_number, limit=limit, other_entries=all_entries[0])
+                    all_analyzer[index].write_result(result= result, minus_sender="agustin", total_duplicates_with=total_duplicates_with)
                     
                     if auto_send:
                       file_path = f"result/{timestr()}_result_{senders[index]}.txt"
-                      send_now(contact_name=contacts[0], file_path=file_path)
+                      if index == 3:
+                        send_now(contact_name=contacts[1], file_path=file_path)
+                      elif index == 2:
+                        send_now(contact_name=contacts[3], file_path=file_path)  
+                      else:
+                        send_now(contact_name=contacts[0], file_path=file_path)
                       
+                    if index == 3:
+                        result_raw = all_entries[index].result_raw(winning_number=winning_number)
+                        all_analyzer[index].write_result_raw(result=result_raw)
+
+                        if auto_send:
+                          file_path = f"result/{timestr()}_result_raw_{senders[index]}.txt"
+                          send_now(contact_name=contacts[1], file_path=file_path)
         print("Done...")
         if not to_continue():
             break
